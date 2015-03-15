@@ -1,11 +1,18 @@
 package me.cheesepro.inviteplus.listeners;
 
 import me.cheesepro.inviteplus.InvitePlus;
-import me.cheesepro.inviteplus.utils.Config;
+import me.cheesepro.inviteplus.utils.Messenger;
+import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by Mark on 2015-03-14.
@@ -13,21 +20,30 @@ import org.bukkit.event.player.PlayerJoinEvent;
 public class PlayerJoinListener implements Listener{
 
     private InvitePlus plugin;
-    Config data;
+    Map<String, ArrayList<String>> cache;
+    Messenger msg;
 
     public PlayerJoinListener(InvitePlus plugin){
         plugin = this.plugin;
-        data = plugin.getData();
+        cache = plugin.getCache();
+        msg = new Messenger(plugin);
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e){
         Player p = e.getPlayer();
-        String uuid = p.getUniqueId().toString();
-        for(String invitersCache : data.getConfigurationSection("inviters").getKeys(false)){
-            for(String invitedCache : data.getConfigurationSection("inviters."+invitersCache).getKeys(false)){
-                if(invitedCache.equalsIgnoreCase(uuid)){
-
+        if(!p.hasPlayedBefore()){
+            String uuid = p.getUniqueId().toString();
+            for(String invitersCache : cache.keySet()){
+                ArrayList<String> inviteds = cache.get(invitersCache);
+                for(String invitedCache : inviteds){
+                    if(invitedCache.equalsIgnoreCase(uuid)){
+                        Player inviter = Bukkit.getPlayer(UUID.fromString(invitedCache));
+                        String inviterName = inviter.getName();
+                        msg.send(p, "a", "Are you invited by " + inviterName + "?");
+                        msg.send(p, "d", "If so, then please type the command " + ChatColor.YELLOW + "/invitedby " + inviterName);
+                        msg.send(p, "c", "If not, then please IGNORE this!");
+                    }
                 }
             }
         }

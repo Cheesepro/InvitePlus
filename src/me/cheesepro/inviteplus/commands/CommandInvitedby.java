@@ -1,7 +1,13 @@
 package me.cheesepro.inviteplus.commands;
 
+import me.cheesepro.inviteplus.InvitePlus;
+import org.bukkit.command.CommandExecutor;
+
 /**
  * Created by Mark on 2015-03-14.
  */
-public class CommandInvitedby {
+public class CommandInvitedby implements CommandExecutor{
+
+    private InvitePlus plugin;
+
 }
