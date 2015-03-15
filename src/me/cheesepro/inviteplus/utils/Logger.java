@@ -17,4 +17,8 @@ public class Logger {
         plugin.getLogger().info(plugin.getConsolepluginName()+input);
     }
 
+    public void noconsole(){
+        send("Only players are able to execute that command!");
+    }
+
 }

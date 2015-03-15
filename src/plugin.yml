@@ -1,0 +1,40 @@
+ name: InvitePlus
+ version: 1.0
+ description: Invitation plugin for MineFuture Network.
+ author: Cheesepro
+ website: http://MineFutureMC.com
+ main: me.cheesepro.inviteplus.InvitePlus
+
+ commands:
+   invite:
+     description: Invite someone
+     usage: /invite <player>
+     permission: inviteplus.use.invite
+     permission-message: ¡ì4¡ìlYou don't have Permission!!
+   invitedby:
+     description: Validate a invitation
+     usage: /invitedby <player>
+     permission: inviteplus.use.invitedby
+     permission-message: ¡ì4¡ìlYou don't have Permission!!
+ permissions:
+   inviteplus.use.*:
+     description: Gives access to all InvitePlus use permissions
+     children:
+       inviteplus.use.invite: true
+       inviteplus.use.invitedby: true
+   inviteplus.use.invite:
+     default: true
+   inviteplus.use.invitedby:
+     default: true
+   mfwarpspawn.admin.*:
+     description: Gives access to all InvitePlus admin permissions
+     children:
+       mfwarpspawn.spawn.spawn: true
+       mfwarpspawn.spawn.setspawn: true
+       mfwarpspawn.spawn.delspawn: true
+   mfwarpspawn.spawn.spawn:
+     default: true
+   mfwarpspawn.spawn.setspawn:
+     default: op
+   mfwarpspawn.spawn.delspawn:
+     default: op

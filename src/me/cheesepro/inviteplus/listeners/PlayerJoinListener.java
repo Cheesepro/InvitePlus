@@ -1,6 +1,7 @@
 package me.cheesepro.inviteplus.listeners;
 
 import me.cheesepro.inviteplus.InvitePlus;
+import me.cheesepro.inviteplus.utils.Config;
 import me.cheesepro.inviteplus.utils.Messenger;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -9,7 +10,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.UUID;
@@ -27,6 +27,7 @@ public class PlayerJoinListener implements Listener{
         plugin = this.plugin;
         cache = plugin.getCache();
         msg = new Messenger(plugin);
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @EventHandler
@@ -34,6 +35,7 @@ public class PlayerJoinListener implements Listener{
         Player p = e.getPlayer();
         if(!p.hasPlayedBefore()){
             String uuid = p.getUniqueId().toString();
+            outterloop:
             for(String invitersCache : cache.keySet()){
                 ArrayList<String> inviteds = cache.get(invitersCache);
                 for(String invitedCache : inviteds){
@@ -43,6 +45,7 @@ public class PlayerJoinListener implements Listener{
                         msg.send(p, "a", "Are you invited by " + inviterName + "?");
                         msg.send(p, "d", "If so, then please type the command " + ChatColor.YELLOW + "/invitedby " + inviterName);
                         msg.send(p, "c", "If not, then please IGNORE this!");
+                        break outterloop;
                     }
                 }
             }

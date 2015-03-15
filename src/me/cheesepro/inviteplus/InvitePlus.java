@@ -1,5 +1,8 @@
 package me.cheesepro.inviteplus;
 
+import me.cheesepro.inviteplus.commands.CommandInvite;
+import me.cheesepro.inviteplus.commands.CommandInvitedby;
+import me.cheesepro.inviteplus.listeners.PlayerJoinListener;
 import me.cheesepro.inviteplus.utils.Config;
 import me.cheesepro.inviteplus.utils.ConfigManager;
 import me.cheesepro.inviteplus.utils.Logger;
@@ -40,11 +43,15 @@ public class InvitePlus extends JavaPlugin implements Listener{
     }
 
     void registerCommands(){
+        CommandInvite commandInviteInstance = new CommandInvite(this);
+        getCommand("invite").setExecutor(commandInviteInstance);
 
+        CommandInvitedby commandInvitedbyInstance = new CommandInvitedby(this);
+        getCommand("invitedby").setExecutor(commandInvitedbyInstance);
     }
 
     void registerListeners(){
-
+        new PlayerJoinListener(this);
     }
 
     void loadConfig(){
@@ -53,13 +60,15 @@ public class InvitePlus extends JavaPlugin implements Listener{
     }
 
     void cacheConfig(){
-        for(String invitersCache : data.getConfigurationSection("inviters").getKeys(false)){
-            ArrayList<String> inviteds = new ArrayList<String>();
-            for(String invitedCache : data.getConfigurationSection("inviters."+invitersCache).getKeys(false)){
-                inviteds.add(invitedCache);
+        if(data.getString("inviters")!=null){
+            for(String invitersCache : data.getConfigurationSection("inviters").getKeys(false)){
+                ArrayList<String> inviteds = new ArrayList<String>();
+                for(String invitedCache : data.getConfigurationSection("inviters."+invitersCache).getKeys(false)){
+                    inviteds.add(invitedCache);
+                }
+                cache.put(invitersCache, inviteds);
+                inviteds.clear();
             }
-            cache.put(invitersCache, inviteds);
-            inviteds.clear();
         }
     }
 
