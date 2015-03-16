@@ -1,6 +1,7 @@
 package me.cheesepro.inviteplus.utils;
 
 import me.cheesepro.inviteplus.InvitePlus;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -44,6 +45,10 @@ public class Messenger
             color(c);
             p.sendMessage(prefix + " " + this.color.toString() + ChatColor.BOLD + msg);
         }
+    }
+
+    public void broadcast(String msg){
+        Bukkit.broadcastMessage(prefix + " " + msg);
     }
 
     private void color(String c)

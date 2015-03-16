@@ -11,9 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by Mark on 2015-03-14.
@@ -23,13 +21,17 @@ public class PlayerJoinListener implements Listener{
     InvitePlus plugin;
     Map<String, List<String>> cache;
     Map<String, Integer> count;
+    Map<String, Map<String, String>> rewards;
     Messenger msg;
+    Logger logger;
 
     public PlayerJoinListener(InvitePlus plugin){
         this.plugin = plugin;
         cache = plugin.getCache();
         count = plugin.getCount();
         msg = new Messenger(plugin);
+        rewards = plugin.getRewards();
+        logger = new Logger(plugin);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
@@ -56,9 +58,24 @@ public class PlayerJoinListener implements Listener{
                 }
             }
         }else{
+            logger.send(count.toString());
+            logger.send(rewards.toString());
             for(String invitersCache : count.keySet()){
                 if(p.getUniqueId().toString().equalsIgnoreCase(invitersCache)){
-                    
+                    for(String reward : rewards.keySet()){
+                        Map<String, String> value = rewards.get(reward);
+                        if(Integer.parseInt(value.get("count"))==count.get(invitersCache)){
+                            if (value.get("message") != null) {
+                                msg.send(p, "*", value.get("message").replace("%player%", p.getName()));
+                            }
+                            if (value.get("broadcast") != null) {
+                                msg.broadcast(value.get("broadcast").replace("%player%", p.getName()));
+                            }
+                            if (value.get("command") != null) {
+                                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), value.get("command").replaceFirst("/", "").replace("%player%", p.getName()));
+                            }
+                        }
+                    }
                 }
             }
         }

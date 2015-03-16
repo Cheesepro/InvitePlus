@@ -10,7 +10,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +23,7 @@ public class InvitePlus extends JavaPlugin implements Listener{
     public static String consolepluginName = "[INFO] ";
     public static Map<String, List<String>> cache = new HashMap<String, List<String>>();
     public static Map<String, Integer> count = new HashMap<String, Integer>();
-    public static Map<String, List<HashMap<String, String>>> rewards = new HashMap<String, List<HashMap<String, String>>>();
+    public static Map<String, Map<String, String>> rewards = new HashMap<String, Map<String, String>>();
     Logger logger = new Logger(this);
     ConfigManager configManager;
     Config data;
@@ -76,19 +75,39 @@ public class InvitePlus extends JavaPlugin implements Listener{
         }
         if(getConfig().get("rewards")!=null){
             for(String reward : getConfig().getConfigurationSection("rewards").getKeys(false)){
-                if(getConfig().get("rewards.count")!=null) {
-                    List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-                    if (getConfig().get("rewards.message") != null) {
-
+                if(getConfig().get("rewards."+reward+".count")!=null) {
+                    try{
+                        int count = Integer.parseInt(String.valueOf(getConfig().get("rewards."+reward+".count")));
+                        if(count!=0){
+                            Map<String, String> value = new HashMap<String, String>();
+                            value.put("count", String.valueOf(getConfig().get("rewards."+reward+".count")));
+                            if (getConfig().get("rewards."+reward+".message") != null) {
+                                value.put("message", String.valueOf(getConfig().get("rewards."+reward+".message")));
+                            }
+                            if (getConfig().get("rewards."+reward+".broadcast") != null) {
+                                value.put("broadcast", String.valueOf(getConfig().get("rewards."+reward+".broadcast")));
+                            }
+                            if (getConfig().get("rewards."+reward+".command") != null) {
+                                value.put("command", String.valueOf(getConfig().get("rewards."+reward+".command")));
+                            }
+                            rewards.put(reward, value);
+                        }else{
+                            logger.send("Count value of reward " + reward + " cannot be 0! Must be at least 1.");
+                        }
+                    }catch (NumberFormatException e){
+                        logger.send("Value of count can only be a INTEGER!");
+                    }catch (NullPointerException e){
+                        logger.send("Please make sure that you filled in all the values in the config!");
+                    }catch (Exception e){
+                        logger.send("Unknown Exception!");
                     }
-                    if (getConfig().get("rewards.broadcast") != null) {
-
-                    }
-                    if (getConfig().get("rewards.command") != null) {
-
-                    }
+                }else{
+                    logger.send("In order to create a valid reward, the count value must be at least 1.");
                 }
             }
+        }
+        if(data.get("rewarded")!=null){
+
         }
     }
 
@@ -113,7 +132,7 @@ public class InvitePlus extends JavaPlugin implements Listener{
         return count;
     }
 
-    public Map<String, List<HashMap<String, String>>> getRewards(){
+    public Map<String, Map<String, String>> getRewards(){
         return rewards;
     }
 

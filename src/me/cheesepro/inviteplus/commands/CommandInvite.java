@@ -53,7 +53,7 @@ public class CommandInvite implements CommandExecutor{
                                         data.saveConfig();
                                         logger.send(cache.toString());
                                         msg.send(p, "a", "Successfully sent invitation!");
-                                        msg.send(p, "d", "Please tell " + target.getName() + " to type /invitedby " + p.getName() + " when he/she first time joining!");
+                                        msg.send(p, "d", "Please tell " + args[0] + " to type /invitedby " + p.getName() + " when he/she first time joining!");
                                     }else{
                                         List<String> inviteds = new ArrayList<String>();
                                         inviteds.add(target.getUniqueId().toString());
@@ -64,7 +64,7 @@ public class CommandInvite implements CommandExecutor{
                                         data.set("inviters."+p.getUniqueId().toString(), list);
                                         data.saveConfig();
                                         msg.send(p, "a", "Successfully sent invitation!");
-                                        msg.send(p, "d", "Please tell " + target.getName() + " to type /invitedby " + p.getName() + " when he/she first time joining!");
+                                        msg.send(p, "d", "Please tell " + args[0] + " to type /invitedby " + p.getName() + " when he/she first time joining!");
                                     }
                                 }else{
                                     msg.send(p, "c", "Sorry, " + args[0] + " has already played before.");
@@ -85,8 +85,6 @@ public class CommandInvite implements CommandExecutor{
         }else{
             logger.noconsole();
         }
-
         return false;
     }
-
 }
