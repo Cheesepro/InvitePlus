@@ -1,7 +1,6 @@
 package me.cheesepro.inviteplus.utils;
 
 import me.cheesepro.inviteplus.InvitePlus;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -10,7 +9,7 @@ import org.bukkit.entity.Player;
  */
 public class Messenger
 {
-    private InvitePlus plugin;
+    InvitePlus plugin;
     ChatColor DARKRED = ChatColor.DARK_RED;
     ChatColor RED = ChatColor.RED;
     ChatColor YELLOW = ChatColor.YELLOW;
@@ -26,10 +25,11 @@ public class Messenger
     ChatColor GREY = ChatColor.GRAY;
     ChatColor BLACK = ChatColor.BLACK;
     ChatColor color;
-    String prefix = plugin.getPluginName();
+    String prefix = "";
 
     public Messenger(InvitePlus plugin)
     {
+        prefix = plugin.getPluginName();
         this.plugin = plugin;
     }
 

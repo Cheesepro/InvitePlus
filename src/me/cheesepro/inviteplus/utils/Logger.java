@@ -7,10 +7,10 @@ import me.cheesepro.inviteplus.InvitePlus;
  */
 public class Logger {
 
-    private InvitePlus plugin;
+    InvitePlus plugin;
 
     public Logger(InvitePlus plugin){
-        plugin = this.plugin;
+        this.plugin = plugin;
     }
 
     public void send(String input){

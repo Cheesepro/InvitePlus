@@ -12,6 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,8 +21,8 @@ import java.util.Map;
 public class InvitePlus extends JavaPlugin implements Listener{
 
     public static String pluginName = ChatColor.AQUA.toString() + ChatColor.BOLD + "["+ChatColor.YELLOW.toString()+ChatColor.BOLD+"InvitePlus"+ChatColor.AQUA.toString()+ChatColor.BOLD+"]";
-    public static String consolepluginName = "[InvitePlus]";
-    public static Map<String, ArrayList<String>> cache = new HashMap<String, ArrayList<String>>();
+    public static String consolepluginName = "[INFO] ";
+    public static Map<String, List<String>> cache = new HashMap<String, List<String>>();
     Logger logger = new Logger(this);
     ConfigManager configManager;
     Config data;
@@ -60,14 +61,10 @@ public class InvitePlus extends JavaPlugin implements Listener{
     }
 
     void cacheConfig(){
-        if(data.getString("inviters")!=null){
+        if(data.get("inviters")!=null){
             for(String invitersCache : data.getConfigurationSection("inviters").getKeys(false)){
-                ArrayList<String> inviteds = new ArrayList<String>();
-                for(String invitedCache : data.getConfigurationSection("inviters."+invitersCache).getKeys(false)){
-                    inviteds.add(invitedCache);
-                }
+                List<String> inviteds = data.getStringList("inviters." + invitersCache);
                 cache.put(invitersCache, inviteds);
-                inviteds.clear();
             }
         }
     }
@@ -85,7 +82,7 @@ public class InvitePlus extends JavaPlugin implements Listener{
         return data;
     }
 
-    public Map<String, ArrayList<String>> getCache(){
+    public Map<String, List<String>> getCache(){
         return cache;
     }
 

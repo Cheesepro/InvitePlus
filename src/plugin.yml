@@ -8,14 +8,12 @@
  commands:
    invite:
      description: Invite someone
-     usage: /invite <player>
      permission: inviteplus.use.invite
-     permission-message: ¡ì4¡ìlYou don't have Permission!!
+     permission-message: You don't have Permission!!
    invitedby:
      description: Validate a invitation
-     usage: /invitedby <player>
      permission: inviteplus.use.invitedby
-     permission-message: ¡ì4¡ìlYou don't have Permission!!
+     permission-message: You don't have Permission!!
  permissions:
    inviteplus.use.*:
      description: Gives access to all InvitePlus use permissions
