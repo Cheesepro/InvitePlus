@@ -22,11 +22,13 @@ public class PlayerJoinListener implements Listener{
 
     InvitePlus plugin;
     Map<String, List<String>> cache;
+    Map<String, Integer> count;
     Messenger msg;
 
     public PlayerJoinListener(InvitePlus plugin){
         this.plugin = plugin;
         cache = plugin.getCache();
+        count = plugin.getCount();
         msg = new Messenger(plugin);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
@@ -51,6 +53,12 @@ public class PlayerJoinListener implements Listener{
                             break outterloop;
                         }
                     }
+                }
+            }
+        }else{
+            for(String invitersCache : count.keySet()){
+                if(p.getUniqueId().toString().equalsIgnoreCase(invitersCache)){
+                    
                 }
             }
         }

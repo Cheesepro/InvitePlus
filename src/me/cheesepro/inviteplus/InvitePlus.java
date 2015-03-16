@@ -23,6 +23,8 @@ public class InvitePlus extends JavaPlugin implements Listener{
     public static String pluginName = ChatColor.AQUA.toString() + ChatColor.BOLD + "["+ChatColor.YELLOW.toString()+ChatColor.BOLD+"InvitePlus"+ChatColor.AQUA.toString()+ChatColor.BOLD+"]";
     public static String consolepluginName = "[INFO] ";
     public static Map<String, List<String>> cache = new HashMap<String, List<String>>();
+    public static Map<String, Integer> count = new HashMap<String, Integer>();
+    public static Map<String, List<HashMap<String, String>>> rewards = new HashMap<String, List<HashMap<String, String>>>();
     Logger logger = new Logger(this);
     ConfigManager configManager;
     Config data;
@@ -67,6 +69,27 @@ public class InvitePlus extends JavaPlugin implements Listener{
                 cache.put(invitersCache, inviteds);
             }
         }
+        if(data.get("count")!=null){
+            for(String invitersCache : data.getConfigurationSection("count").getKeys(false)){
+                count.put(invitersCache, data.getInt("count." + invitersCache));
+            }
+        }
+        if(getConfig().get("rewards")!=null){
+            for(String reward : getConfig().getConfigurationSection("rewards").getKeys(false)){
+                if(getConfig().get("rewards.count")!=null) {
+                    List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+                    if (getConfig().get("rewards.message") != null) {
+
+                    }
+                    if (getConfig().get("rewards.broadcast") != null) {
+
+                    }
+                    if (getConfig().get("rewards.command") != null) {
+
+                    }
+                }
+            }
+        }
     }
 
 
@@ -84,6 +107,14 @@ public class InvitePlus extends JavaPlugin implements Listener{
 
     public Map<String, List<String>> getCache(){
         return cache;
+    }
+
+    public Map<String, Integer> getCount(){
+        return count;
+    }
+
+    public Map<String, List<HashMap<String, String>>> getRewards(){
+        return rewards;
     }
 
 }

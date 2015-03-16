@@ -68,10 +68,10 @@ public class CommandInvitedby implements CommandExecutor{
                                         msg.send(p, "c", "Sorry, " + inviter.getName() + " did not invite you.");
                                     }
                                 }else{
-                                    msg.send(p, "c", "Sorry, " + inviter.getName() + " has not invited anyone.");
+                                    msg.send(p, "c", "Sorry, " + inviter.getName() + " did not invite you.");
                                 }
                             }else{
-                                msg.send(p, "c", "Sorry, " + inviter.getName() + " has never played before.");
+                                msg.send(p, "c", "Sorry, " + inviter.getName() + " did not invite you.");
                             }
                         }else{
                             msg.send(p, "c", "Sorry, " + args[0] + " is not a valid player");
