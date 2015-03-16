@@ -24,6 +24,9 @@ public class InvitePlus extends JavaPlugin implements Listener{
     public static Map<String, List<String>> cache = new HashMap<String, List<String>>();
     public static Map<String, Integer> count = new HashMap<String, Integer>();
     public static Map<String, Map<String, String>> rewards = new HashMap<String, Map<String, String>>();
+    public static Map<String, Integer> rewardHistories = new HashMap<String, Integer>();
+    public static Map<String, String> messages = new HashMap<String, String>();
+    public static boolean creditEnabled = true;
     Logger logger = new Logger(this);
     ConfigManager configManager;
     Config data;
@@ -62,16 +65,8 @@ public class InvitePlus extends JavaPlugin implements Listener{
     }
 
     void cacheConfig(){
-        if(data.get("inviters")!=null){
-            for(String invitersCache : data.getConfigurationSection("inviters").getKeys(false)){
-                List<String> inviteds = data.getStringList("inviters." + invitersCache);
-                cache.put(invitersCache, inviteds);
-            }
-        }
-        if(data.get("count")!=null){
-            for(String invitersCache : data.getConfigurationSection("count").getKeys(false)){
-                count.put(invitersCache, data.getInt("count." + invitersCache));
-            }
+        if(getConfig().get("credit-onjoin")!=null){
+            creditEnabled = Boolean.parseBoolean(String.valueOf(getConfig().get("credit-onjoin")));
         }
         if(getConfig().get("rewards")!=null){
             for(String reward : getConfig().getConfigurationSection("rewards").getKeys(false)){
@@ -106,8 +101,26 @@ public class InvitePlus extends JavaPlugin implements Listener{
                 }
             }
         }
-        if(data.get("rewarded")!=null){
-
+        if(getConfig().get("messages")!=null){
+            for(String message : getConfig().getConfigurationSection("messages").getKeys(false)){
+                messages.put(message, getConfig().getString("messages."+message));
+            }
+        }
+        if(data.get("inviters")!=null){
+            for(String invitersCache : data.getConfigurationSection("inviters").getKeys(false)){
+                List<String> inviteds = data.getStringList("inviters." + invitersCache);
+                cache.put(invitersCache, inviteds);
+            }
+        }
+        if(data.get("count")!=null){
+            for(String invitersCache : data.getConfigurationSection("count").getKeys(false)){
+                count.put(invitersCache, data.getInt("count." + invitersCache));
+            }
+        }
+        if(data.get("rewardhistories")!=null){
+            for(String player : data.getConfigurationSection("rewardhistories").getKeys(false)){
+                rewardHistories.put(player, getConfig().getInt("rewardhistories."+player));
+            }
         }
     }
 
@@ -134,6 +147,18 @@ public class InvitePlus extends JavaPlugin implements Listener{
 
     public Map<String, Map<String, String>> getRewards(){
         return rewards;
+    }
+
+    public Map<String, Integer> getRewardHistories() {
+        return rewardHistories;
+    }
+
+    public Map<String, String> getMessages(){
+        return messages;
+    }
+
+    public boolean isCreditEnabled(){
+        return creditEnabled;
     }
 
 }

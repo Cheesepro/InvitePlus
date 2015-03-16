@@ -24,6 +24,8 @@ public class CommandInvitedby implements CommandExecutor{
     Messenger msg;
     Logger logger;
     Map<String, List<String>> cache;
+    Map<String, Integer> count;
+    Map<String, String> messages;
     Config data;
 
     public CommandInvitedby(InvitePlus plugin){
@@ -32,6 +34,8 @@ public class CommandInvitedby implements CommandExecutor{
         logger = new Logger(plugin);
         cache = plugin.getCache();
         data = plugin.getData();
+        count = plugin.getCount();
+        messages = plugin.getMessages();
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
@@ -53,7 +57,6 @@ public class CommandInvitedby implements CommandExecutor{
                                         }
                                     }
                                     if(have){
-                                        msg.send(p, "a", "Thank you for validating the invitation!");
                                         inviteds.remove(p.getUniqueId().toString());
                                         cache.put(inviter.getUniqueId().toString(), inviteds);
                                         if(data.get("count."+inviter.getUniqueId().toString())!=null){
@@ -64,23 +67,24 @@ public class CommandInvitedby implements CommandExecutor{
                                             data.set("count."+inviter.getUniqueId().toString(), 1);
                                             data.saveConfig();
                                         }
+                                        msg.send(p, "*", messages.get("validated-success").replace("%target%", inviter.getName()).replace("%player%", p.getName()));
                                     }else{
-                                        msg.send(p, "c", "Sorry, " + inviter.getName() + " did not invite you.");
+                                        msg.send(p, "*", messages.get("validated-unsuceess").replace("%target%", inviter.getName()).replace("%player%", p.getName()));
                                     }
                                 }else{
-                                    msg.send(p, "c", "Sorry, " + inviter.getName() + " did not invite you.");
+                                    msg.send(p, "*", messages.get("validated-unsuceess").replace("%target%", inviter.getName()).replace("%player%", p.getName()));
                                 }
                             }else{
-                                msg.send(p, "c", "Sorry, " + inviter.getName() + " did not invite you.");
+                                msg.send(p, "*", messages.get("validated-unsuceess").replace("%target%", inviter.getName()).replace("%player%", p.getName()));
                             }
                         }else{
-                            msg.send(p, "c", "Sorry, " + args[0] + " is not a valid player");
+                            msg.send(p, "*", messages.get("invalid-player").replace("%target%", args[0]).replace("%player%", p.getName()));
                         }
                     }catch (Exception e){
                         e.printStackTrace();
                     }
                 }else{
-                    msg.send(p, "d", "/invitedby <player>");
+                    msg.send(p, "d", messages.get("command-invitedby-usage").replace("%player%", p.getName()));
                 }
             }
 

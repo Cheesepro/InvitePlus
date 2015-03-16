@@ -22,6 +22,7 @@ public class CommandInvite implements CommandExecutor{
     Messenger msg;
     Logger logger;
     Map<String, List<String>> cache;
+    Map<String, String> messages;
     Config data;
 
     public CommandInvite(InvitePlus plugin){
@@ -30,6 +31,7 @@ public class CommandInvite implements CommandExecutor{
         logger = new Logger(plugin);
         cache = plugin.getCache();
         data = plugin.getData();
+        messages = plugin.getMessages();
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
@@ -49,11 +51,11 @@ public class CommandInvite implements CommandExecutor{
                                         logger.send(target.getUniqueId().toString());
                                         List<String> list = data.getStringList("inviters."+p.getUniqueId().toString());
                                         list.add(list.size(), target.getUniqueId().toString());
-                                        data.set("inviters."+p.getUniqueId().toString(), list);
+                                        data.set("inviters." + p.getUniqueId().toString(), list);
                                         data.saveConfig();
                                         logger.send(cache.toString());
-                                        msg.send(p, "a", "Successfully sent invitation!");
-                                        msg.send(p, "d", "Please tell " + args[0] + " to type /invitedby " + p.getName() + " when he/she first time joining!");
+                                        msg.send(p, "*", messages.get("sent-invitation").replace("%target%", target.getName()).replace("%player%", p.getName()));
+                                        msg.send(p, "*", messages.get("invitation-procedure").replace("%target%", target.getName()).replace("%player%", p.getName()));
                                     }else{
                                         List<String> inviteds = new ArrayList<String>();
                                         inviteds.add(target.getUniqueId().toString());
@@ -63,23 +65,23 @@ public class CommandInvite implements CommandExecutor{
                                         list.add(list.size(), target.getUniqueId().toString());
                                         data.set("inviters."+p.getUniqueId().toString(), list);
                                         data.saveConfig();
-                                        msg.send(p, "a", "Successfully sent invitation!");
-                                        msg.send(p, "d", "Please tell " + args[0] + " to type /invitedby " + p.getName() + " when he/she first time joining!");
+                                        msg.send(p, "*", messages.get("sent-invitation").replace("%target%", target.getName()).replace("%player%", p.getName()));
+                                        msg.send(p, "*", messages.get("invitation-procedure").replace("%target%", target.getName()).replace("%player%", p.getName()));
                                     }
                                 }else{
-                                    msg.send(p, "c", "Sorry, " + args[0] + " has already played before.");
+                                    msg.send(p, "*", messages.get("already-played").replace("%target%", args[0]).replace("%player%", p.getName()));
                                 }
                             }else{
-                                msg.send(p, "c", "Sorry, " + args[0] + " is not a valid player");
+                                msg.send(p, "*", messages.get("invalid-player").replace("%target%", args[0]).replace("%player%", p.getName()));
                             }
                         }catch (Exception e){
                             e.printStackTrace();
                         }
                     }else{
-                        msg.send(p, "c", "Sorry, " + args[0] + " is not a valid player");
+                        msg.send(p, "*", messages.get("invalid-player").replace("%target%", args[0]).replace("%player%", p.getName()));
                     }
                 }else{
-                    msg.send(p, "d", "/invite <player>");
+                    msg.send(p, "d", messages.get("command-invite-usage").replace("%player%", p.getName()));
                 }
             }
         }else{

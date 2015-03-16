@@ -1,8 +1,6 @@
-###################################################
-#                                                 #
-#          InvitePlus Configuration file          #
-#                                                 #
-###################################################
+# +----------------------------------------------------+
+# <           InvitePlus Configuration file            >
+# +----------------------------------------------------+
 
   credit-onjoin: true
 
@@ -15,9 +13,12 @@
 
   messages:
     first-time-join-invited-ask: "Are you invited by %target%?"
+    first-time-join-invited-command: "If so, then please type the command /invitedby %target%. If not, then please IGNORE this!"
     validated-success: "Thank you for validating the invitation!"
     validated-unsuceess: "Sorry, %target% did not invite you."
     invalid-player: "Sorry, %target% is not a valid player"
     already-played: "Sorry, %target% has already played before."
     sent-invitation: "Successfully sent invitation!"
     invitation-procedure: "Please tell %target% to type /invitedby %player% when he/she first time join!"
+    command-invite-usage: "/invite <player>" #%target% won't work here
+    command-invitedby-usage: "/invitedby <player>" #%target% won't work here
