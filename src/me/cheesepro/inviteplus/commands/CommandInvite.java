@@ -48,25 +48,22 @@ public class CommandInvite implements CommandExecutor{
                                         List<String> inviteds = cache.get(p.getUniqueId().toString());
                                         inviteds.add(target.getUniqueId().toString());
                                         cache.put(p.getUniqueId().toString(), inviteds);
-                                        logger.send(target.getUniqueId().toString());
                                         List<String> list = data.getStringList("inviters."+p.getUniqueId().toString());
                                         list.add(list.size(), target.getUniqueId().toString());
                                         data.set("inviters." + p.getUniqueId().toString(), list);
                                         data.saveConfig();
-                                        logger.send(cache.toString());
-                                        msg.send(p, "*", messages.get("sent-invitation").replace("%target%", target.getName()).replace("%player%", p.getName()));
-                                        msg.send(p, "*", messages.get("invitation-procedure").replace("%target%", target.getName()).replace("%player%", p.getName()));
+                                        msg.send(p, "*", messages.get("sent-invitation").replace("%target%", args[0]).replace("%player%", p.getName()));
+                                        msg.send(p, "*", messages.get("invitation-procedure").replace("%target%", args[0]).replace("%player%", p.getName()));
                                     }else{
                                         List<String> inviteds = new ArrayList<String>();
                                         inviteds.add(target.getUniqueId().toString());
                                         cache.put(p.getUniqueId().toString(), inviteds);
-                                        logger.send(target.getUniqueId().toString());
                                         List<String> list = data.getStringList("inviters."+p.getUniqueId().toString());
                                         list.add(list.size(), target.getUniqueId().toString());
                                         data.set("inviters."+p.getUniqueId().toString(), list);
                                         data.saveConfig();
-                                        msg.send(p, "*", messages.get("sent-invitation").replace("%target%", target.getName()).replace("%player%", p.getName()));
-                                        msg.send(p, "*", messages.get("invitation-procedure").replace("%target%", target.getName()).replace("%player%", p.getName()));
+                                        msg.send(p, "*", messages.get("sent-invitation").replace("%target%", args[0]).replace("%player%", p.getName()));
+                                        msg.send(p, "*", messages.get("invitation-procedure").replace("%target%", args[0]).replace("%player%", p.getName()));
                                     }
                                 }else{
                                     msg.send(p, "*", messages.get("already-played").replace("%target%", args[0]).replace("%player%", p.getName()));

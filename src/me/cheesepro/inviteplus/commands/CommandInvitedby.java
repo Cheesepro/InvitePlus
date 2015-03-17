@@ -75,7 +75,7 @@ public class CommandInvitedby implements CommandExecutor{
                                     msg.send(p, "*", messages.get("validated-unsuceess").replace("%target%", inviter.getName()).replace("%player%", p.getName()));
                                 }
                             }else{
-                                msg.send(p, "*", messages.get("validated-unsuceess").replace("%target%", inviter.getName()).replace("%player%", p.getName()));
+                                msg.send(p, "*", messages.get("validated-unsuceess").replace("%target%", args[0]).replace("%player%", p.getName()));
                             }
                         }else{
                             msg.send(p, "*", messages.get("invalid-player").replace("%target%", args[0]).replace("%player%", p.getName()));

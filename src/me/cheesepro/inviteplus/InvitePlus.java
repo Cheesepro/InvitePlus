@@ -19,10 +19,11 @@ import java.util.Map;
  */
 public class InvitePlus extends JavaPlugin implements Listener{
 
-    public static String pluginName = ChatColor.AQUA.toString() + ChatColor.BOLD + "["+ChatColor.YELLOW.toString()+ChatColor.BOLD+"InvitePlus"+ChatColor.AQUA.toString()+ChatColor.BOLD+"]";
+    public static String pluginName = ChatColor.AQUA.toString() + ChatColor.BOLD + "["+ChatColor.YELLOW.toString()+ChatColor.BOLD+"InvitePlus"+ChatColor.AQUA.toString()+ChatColor.BOLD+"]"+ChatColor.RESET;
     public static String consolepluginName = "[INFO] ";
     public static Map<String, List<String>> cache = new HashMap<String, List<String>>();
     public static Map<String, Integer> count = new HashMap<String, Integer>();
+    public static Map<String, Map<String, List<String>>> listRewards = new HashMap<String, Map<String, List<String>>>();
     public static Map<String, Map<String, String>> rewards = new HashMap<String, Map<String, String>>();
     public static Map<String, Integer> rewardHistories = new HashMap<String, Integer>();
     public static Map<String, String> messages = new HashMap<String, String>();
@@ -75,17 +76,27 @@ public class InvitePlus extends JavaPlugin implements Listener{
                         int count = Integer.parseInt(String.valueOf(getConfig().get("rewards."+reward+".count")));
                         if(count!=0){
                             Map<String, String> value = new HashMap<String, String>();
+                            Map<String, List<String>> rewardmessages = new HashMap<String, List<String>>();
+                            Map<String, List<String>> rewardbroadcasts = new HashMap<String, List<String>>();
+                            Map<String, List<String>> rewardcommands = new HashMap<String, List<String>>();
                             value.put("count", String.valueOf(getConfig().get("rewards."+reward+".count")));
                             if (getConfig().get("rewards."+reward+".message") != null) {
-                                value.put("message", String.valueOf(getConfig().get("rewards."+reward+".message")));
+                                List<String> messagescache = data.getStringList("rewards."+reward+".message");
+                                rewardmessages.put(reward, messagescache);
                             }
                             if (getConfig().get("rewards."+reward+".broadcast") != null) {
-                                value.put("broadcast", String.valueOf(getConfig().get("rewards."+reward+".broadcast")));
+                                List<String> broadcastcache = data.getStringList("rewards."+reward+".broadcast");
+                                rewardbroadcasts.put(reward, broadcastcache);
                             }
                             if (getConfig().get("rewards."+reward+".command") != null) {
-                                value.put("command", String.valueOf(getConfig().get("rewards."+reward+".command")));
+                                List<String> broadcastcache = data.getStringList("rewards."+reward+".command");
+                                rewardcommands.put(reward, broadcastcache);
                             }
+                            //TODO Vault money support
                             rewards.put(reward, value);
+                            listRewards.put("commands", rewardcommands);
+                            listRewards.put("messages", rewardmessages);
+                            listRewards.put("broadcasts", rewardbroadcasts);
                         }else{
                             logger.send("Count value of reward " + reward + " cannot be 0! Must be at least 1.");
                         }
@@ -147,6 +158,10 @@ public class InvitePlus extends JavaPlugin implements Listener{
 
     public Map<String, Map<String, String>> getRewards(){
         return rewards;
+    }
+
+    public Map<String, Map<String, List<String>>> getListRewards() {
+        return listRewards;
     }
 
     public Map<String, Integer> getRewardHistories() {

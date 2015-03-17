@@ -3,7 +3,6 @@ package me.cheesepro.inviteplus.listeners;
 import me.cheesepro.inviteplus.InvitePlus;
 import me.cheesepro.inviteplus.utils.Config;
 import me.cheesepro.inviteplus.utils.Messenger;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -22,6 +21,7 @@ public class PlayerJoinListener implements Listener{
     Map<String, List<String>> cache;
     Map<String, Integer> count;
     Map<String, Map<String, String>> rewards;
+    Map<String, Map<String, List<String>>> listRewards;
     Map<String, Integer> rewardHistories;
     Map<String, String> messages;
     Messenger msg;
@@ -34,6 +34,7 @@ public class PlayerJoinListener implements Listener{
         count = plugin.getCount();
         msg = new Messenger(plugin);
         rewards = plugin.getRewards();
+        listRewards = plugin.getListRewards();
         data = plugin.getData();
         rewardHistories = plugin.getRewardHistories();
         creditEnabled = plugin.isCreditEnabled();
@@ -85,14 +86,23 @@ public class PlayerJoinListener implements Listener{
                                             data.saveConfig();
                                             rewardHistories.put(p.getUniqueId().toString(), count.get(p.getUniqueId().toString()));
                                         }
-                                        if (value.get("message") != null) {
-                                            msg.send(p, "*", value.get("message").replace("%player%", p.getName()));
+                                        if (listRewards.get("messages").get(reward)!=null) { //TODO Think over the logic
+                                            List<String> messagescache = listRewards.get("messages").get(reward);
+                                            for(String message : messagescache){
+                                                msg.send(p, "*", message.replace("%player%", p.getName()));
+                                            }
                                         }
-                                        if (value.get("broadcast") != null) {
-                                            msg.broadcast(value.get("broadcast").replace("%player%", p.getName()));
+                                        if (listRewards.get("broadcasts").get(reward)!=null) {
+                                            List<String> broadcastscache = listRewards.get("broadcasts").get(reward);
+                                            for(String broadcast : broadcastscache){
+                                                msg.broadcast(broadcast.replace("%player%", p.getName()));
+                                            }
                                         }
-                                        if (value.get("command") != null) {
-                                            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), value.get("command").replaceFirst("/", "").replace("%player%", p.getName()));
+                                        if (listRewards.get("commands").get(reward)!=null) {
+                                            List<String> commandscache = listRewards.get("commands").get(reward);
+                                            for(String command : commandscache){
+                                                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command.replace("%player%", p.getName()));
+                                            }
                                         }
                                     }
                                 } else {
@@ -106,14 +116,23 @@ public class PlayerJoinListener implements Listener{
                                             data.saveConfig();
                                             rewardHistories.put(p.getUniqueId().toString(), count.get(p.getUniqueId().toString()));
                                         }
-                                        if (value.get("message") != null) {
-                                            msg.send(p, "*", value.get("message").replace("%player%", p.getName()));
+                                        if (listRewards.get("messages").get(reward)!=null) {
+                                            List<String> messagescache = listRewards.get("messages").get(reward);
+                                            for(String message : messagescache){
+                                                msg.send(p, "*", message.replace("%player%", p.getName()));
+                                            }
                                         }
-                                        if (value.get("broadcast") != null) {
-                                            msg.broadcast(value.get("broadcast").replace("%player%", p.getName()));
+                                        if (listRewards.get("broadcasts").get(reward)!=null) {
+                                            List<String> broadcastscache = listRewards.get("broadcasts").get(reward);
+                                            for(String broadcast : broadcastscache){
+                                                msg.broadcast(broadcast.replace("%player%", p.getName()));
+                                            }
                                         }
-                                        if (value.get("command") != null) {
-                                            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), value.get("command").replaceFirst("/", "").replace("%player%", p.getName()));
+                                        if (listRewards.get("commands").get(reward)!=null) {
+                                            List<String> commandscache = listRewards.get("commands").get(reward);
+                                            for(String command : commandscache){
+                                                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command.replace("%player%", p.getName()));
+                                            }
                                         }
                                     }
                                 }
@@ -122,7 +141,7 @@ public class PlayerJoinListener implements Listener{
                     }
                 }
             }
-        }, 60);
+        }, 50);
     }
 
 }

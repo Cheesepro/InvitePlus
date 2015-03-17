@@ -38,7 +38,7 @@ public class Messenger
     {
         if (c.equalsIgnoreCase("*"))
         {
-            p.sendMessage(prefix + " " + msg);
+            p.sendMessage(prefix + " " + ChatColor.translateAlternateColorCodes('&', msg));
         }
         else
         {
@@ -48,7 +48,7 @@ public class Messenger
     }
 
     public void broadcast(String msg){
-        Bukkit.broadcastMessage(prefix + " " + msg);
+        Bukkit.broadcastMessage(prefix + " " + ChatColor.translateAlternateColorCodes('&', msg));
     }
 
     private void color(String c)

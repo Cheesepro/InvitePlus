@@ -5,10 +5,16 @@
   credit-onjoin: true
 
   rewards:
-    first:
-      message: "You have invited 1 player!"
-      broadcast: "%player% have invited 1 player!"
-      command: "/give %player% 1 1"
+    example:
+      message:
+      - "You have invited 1 player!"
+      - "Second message!"
+      broadcast:
+      - "%player% have invited 1 player!"
+      - "Second broadcast!"
+      command:
+      - "/give %player% 1 1"
+      - "/give %player% 133 1"
       count: 1
 
   messages:
