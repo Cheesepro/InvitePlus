@@ -143,7 +143,7 @@ public class InvitePlus extends JavaPlugin implements Listener{
         }
         if(data.get("rewardhistories")!=null){
             for(String player : data.getConfigurationSection("rewardhistories").getKeys(false)){
-                rewardHistories.put(player, getConfig().getInt("rewardhistories."+player));
+                rewardHistories.put(player, data.getInt("rewardhistories."+player));
             }
         }
     }
