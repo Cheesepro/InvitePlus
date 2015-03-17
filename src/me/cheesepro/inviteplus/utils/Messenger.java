@@ -43,7 +43,7 @@ public class Messenger
         else
         {
             color(c);
-            p.sendMessage(prefix + " " + this.color.toString() + ChatColor.BOLD + msg);
+            p.sendMessage(prefix + " " + this.color.toString() + msg);
         }
     }
 

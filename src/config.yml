@@ -2,29 +2,61 @@
 # <           InvitePlus Configuration file            >
 # +----------------------------------------------------+
 
+#If this is true, then whenever a non-OP player join
+#the plugin will send the credit of this plugin to the player
+#player do leave it true if you want to support the plugin! Thank you! :)
   credit-onjoin: true
 
+# {>============Rewards===========<}
+#This is a example reward config that have all the available varibles
+#  rewards:
+#    example:  #<-----[You can change it to whatever, but remeber DO NOT make 2 rewards the same name!]
+#      messages:
+#      - "You have invited 1 player!"
+#      - "Second message!"
+#      broadcasts:
+#      - "%player% have invited 1 player!"
+#      - "Second broadcast!"
+#      commands:
+#      - "/give %player% 1 1"
+#      - "/give %player% 133 1"
+#      money: 1000000
+#      count: 1
+#
+# {>========Rewards Varibles=======<}
+# %player% refers to the player whoes receiving those varibles above.
+# {>======Rewards Varibles End======<}
+#Here is where you add the rewards based on how much players have the inviter invited.
   rewards:
     example:
-      message:
+      messages:
       - "You have invited 1 player!"
       - "Second message!"
-      broadcast:
+      broadcasts:
       - "%player% have invited 1 player!"
       - "Second broadcast!"
-      command:
+      commands:
       - "/give %player% 1 1"
       - "/give %player% 133 1"
+      money: 1000000
       count: 1
+# {>=========Rewards End==========<}
 
+# {>===========Messages===========<}
+#Here is where you can add your own custom messages.
+# {>========Messages Varibles=======<}
+# %player% refers to the player whoes receiving those varibles above.
+# {>======Messages Varibles End=====<}
   messages:
     first-time-join-invited-ask: "Are you invited by %target%?"
     first-time-join-invited-command: "If so, then please type the command /invitedby %target%. If not, then please IGNORE this!"
     validated-success: "Thank you for validating the invitation!"
     validated-unsuceess: "Sorry, %target% did not invite you."
     invalid-player: "Sorry, %target% is not a valid player"
+    no-invite-self: "Sorry, you cannot invite your self."
     already-played: "Sorry, %target% has already played before."
     sent-invitation: "Successfully sent invitation!"
     invitation-procedure: "Please tell %target% to type /invitedby %player% when he/she first time join!"
     command-invite-usage: "/invite <player>" #%target% won't work here
     command-invitedby-usage: "/invitedby <player>" #%target% won't work here
+# {>==========Messages End=========<}

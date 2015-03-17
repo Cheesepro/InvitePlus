@@ -4,6 +4,7 @@
  author: Cheesepro
  website: http://MineFutureMC.com
  main: me.cheesepro.inviteplus.InvitePlus
+ softdepend: [Vault]
 
  commands:
    invite:

@@ -1,7 +1,5 @@
 package me.cheesepro.inviteplus.utils;
 
-import org.apache.commons.io.IOUtils;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -22,7 +20,6 @@ public class Bought {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.print(premium);
         return premium;
     }
 

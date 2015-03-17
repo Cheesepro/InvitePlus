@@ -3,6 +3,8 @@ package me.cheesepro.inviteplus.listeners;
 import me.cheesepro.inviteplus.InvitePlus;
 import me.cheesepro.inviteplus.utils.Config;
 import me.cheesepro.inviteplus.utils.Messenger;
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -24,6 +26,7 @@ public class PlayerJoinListener implements Listener{
     Map<String, Map<String, List<String>>> listRewards;
     Map<String, Integer> rewardHistories;
     Map<String, String> messages;
+    Economy economy;
     Messenger msg;
     Config data;
     Boolean creditEnabled;
@@ -39,6 +42,9 @@ public class PlayerJoinListener implements Listener{
         rewardHistories = plugin.getRewardHistories();
         creditEnabled = plugin.isCreditEnabled();
         messages = plugin.getMessages();
+        if(plugin.setupEconomy()){
+            economy = plugin.getEconomy();
+        }
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
@@ -48,8 +54,7 @@ public class PlayerJoinListener implements Listener{
             @Override
             public void run() {
                 Player p = e.getPlayer();
-                if (creditEnabled) {
-                    msg.send(p, "e", "This plugin is coded by XxxCheeseproxxX A.K.A. Cheesepro A.K.A. Mark");
+                if (creditEnabled && !(p.isOp())) {
                     msg.send(p, "b", "Check out his spigot profile if you wish! http://www.spigotmc.org/members/xxxcheeseproxxx.23156/");
                     msg.send(p, "a", "Check out his website too! http://minefuturemc.com/");
                 }
@@ -86,7 +91,7 @@ public class PlayerJoinListener implements Listener{
                                             data.saveConfig();
                                             rewardHistories.put(p.getUniqueId().toString(), count.get(p.getUniqueId().toString()));
                                         }
-                                        if (listRewards.get("messages").get(reward)!=null) { //TODO Think over the logic
+                                        if (listRewards.get("messages").get(reward)!=null) {
                                             List<String> messagescache = listRewards.get("messages").get(reward);
                                             for(String message : messagescache){
                                                 msg.send(p, "*", message.replace("%player%", p.getName()));
@@ -101,7 +106,13 @@ public class PlayerJoinListener implements Listener{
                                         if (listRewards.get("commands").get(reward)!=null) {
                                             List<String> commandscache = listRewards.get("commands").get(reward);
                                             for(String command : commandscache){
-                                                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command.replace("%player%", p.getName()));
+                                                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command.replaceFirst("/", "").replace("%player%", p.getName()));
+                                            }
+                                        }
+                                        if(plugin.setupEconomy()){
+                                            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(p.getUniqueId());
+                                            if (value.get("money")!=null) {
+                                                InvitePlus.economy.depositPlayer(offlinePlayer, Double.parseDouble(value.get("money")));
                                             }
                                         }
                                     }
@@ -131,8 +142,12 @@ public class PlayerJoinListener implements Listener{
                                         if (listRewards.get("commands").get(reward)!=null) {
                                             List<String> commandscache = listRewards.get("commands").get(reward);
                                             for(String command : commandscache){
-                                                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command.replace("%player%", p.getName()));
+                                                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command.replaceFirst("/", "").replace("%player%", p.getName()));
                                             }
+                                        }
+                                        if(plugin.setupEconomy()){
+                                            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(p.getUniqueId());
+                                            InvitePlus.economy.depositPlayer(offlinePlayer, Double.parseDouble(value.get("money")));
                                         }
                                     }
                                 }
@@ -141,7 +156,7 @@ public class PlayerJoinListener implements Listener{
                     }
                 }
             }
-        }, 50);
+        }, 20);
     }
 
 }

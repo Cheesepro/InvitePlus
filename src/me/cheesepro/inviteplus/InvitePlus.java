@@ -6,8 +6,10 @@ import me.cheesepro.inviteplus.listeners.PlayerJoinListener;
 import me.cheesepro.inviteplus.utils.Config;
 import me.cheesepro.inviteplus.utils.ConfigManager;
 import me.cheesepro.inviteplus.utils.Logger;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -27,24 +29,31 @@ public class InvitePlus extends JavaPlugin implements Listener{
     public static Map<String, Map<String, String>> rewards = new HashMap<String, Map<String, String>>();
     public static Map<String, Integer> rewardHistories = new HashMap<String, Integer>();
     public static Map<String, String> messages = new HashMap<String, String>();
+    public static Economy economy = null;
     public static boolean creditEnabled = true;
     Logger logger = new Logger(this);
     ConfigManager configManager;
     Config data;
 
-
     public void onEnable(){
-        logger.send("Enabling...");
         saveDefaultConfig();
         loadConfig();
         cacheConfig();
         registerCommands();
         registerListeners();
+        if(setupEconomy()) try {
+            logger.send("Vault dependency found! Money feature enabled!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.send("Vault dependency found! But an error as occurred!");
+        }
+        else{
+            logger.send("Vault dependency not found! Money feature disabled!");
+        }
         logger.send("Enabled!");
     }
 
     public void onDisable(){
-        logger.send("Disabling...");
         logger.send("Disabled");
     }
 
@@ -80,19 +89,23 @@ public class InvitePlus extends JavaPlugin implements Listener{
                             Map<String, List<String>> rewardbroadcasts = new HashMap<String, List<String>>();
                             Map<String, List<String>> rewardcommands = new HashMap<String, List<String>>();
                             value.put("count", String.valueOf(getConfig().get("rewards."+reward+".count")));
-                            if (getConfig().get("rewards."+reward+".message") != null) {
-                                List<String> messagescache = data.getStringList("rewards."+reward+".message");
+                            if (getConfig().get("rewards."+reward+".messages") != null) {
+                                List<String> messagescache = getConfig().getStringList("rewards." + reward + ".messages");
                                 rewardmessages.put(reward, messagescache);
                             }
-                            if (getConfig().get("rewards."+reward+".broadcast") != null) {
-                                List<String> broadcastcache = data.getStringList("rewards."+reward+".broadcast");
+                            if (getConfig().get("rewards."+reward+".broadcasts") != null) {
+                                List<String> broadcastcache = getConfig().getStringList("rewards." + reward + ".broadcasts");
                                 rewardbroadcasts.put(reward, broadcastcache);
                             }
-                            if (getConfig().get("rewards."+reward+".command") != null) {
-                                List<String> broadcastcache = data.getStringList("rewards."+reward+".command");
+                            if (getConfig().get("rewards."+reward+".commands") != null) {
+                                List<String> broadcastcache = getConfig().getStringList("rewards."+reward+".commands");
                                 rewardcommands.put(reward, broadcastcache);
                             }
-                            //TODO Vault money support
+                            if(setupEconomy()){
+                                if (getConfig().get("rewards."+reward+".money") != null) {
+                                    value.put("money", String.valueOf(getConfig().get("rewards."+reward+".money")));
+                                }
+                            }
                             rewards.put(reward, value);
                             listRewards.put("commands", rewardcommands);
                             listRewards.put("messages", rewardmessages);
@@ -135,6 +148,15 @@ public class InvitePlus extends JavaPlugin implements Listener{
         }
     }
 
+    public boolean setupEconomy()
+    {
+        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+        if (economyProvider != null) {
+            economy = economyProvider.getProvider();
+        }
+        return (economy != null);
+    }
+
 
     public String getPluginName(){
         return pluginName;
@@ -174,6 +196,10 @@ public class InvitePlus extends JavaPlugin implements Listener{
 
     public boolean isCreditEnabled(){
         return creditEnabled;
+    }
+
+    public Economy getEconomy(){
+        return economy;
     }
 
 }

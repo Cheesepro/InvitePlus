@@ -43,6 +43,10 @@ public class CommandInvite implements CommandExecutor{
                         try{
                             OfflinePlayer target = Bukkit.getOfflinePlayer(UUIDFetcher.getUUIDOf(args[0]));
                             if(target!=null){
+                                if(target.getUniqueId().toString().equalsIgnoreCase(p.getUniqueId().toString())){
+                                    msg.send(p, "*", messages.get("no-invite-self").replace("%target%", args[0]).replace("%player%", p.getName()));
+                                    return false;
+                                }
                                 if (!target.hasPlayedBefore()){
                                     if(cache.keySet().contains(p.getUniqueId().toString())){
                                         List<String> inviteds = cache.get(p.getUniqueId().toString());
